@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ssl-termination
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ssl-termination
+  template:
+    metadata:
+      labels:
+        app: ssl-termination
+    spec:
+      containers:
+        - name: httpd
+          image: ufocultist/getting-started:latest
+          ports:
+          - containerPort: 80
+            name: httpd
+ 
+        - name: haproxy
+          imagePullPolicy: Never
+          image: ssl-termination
+          ports:
+          - containerPort: 443

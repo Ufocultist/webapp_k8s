@@ -1,0 +1,7 @@
+FROM centos:7
+RUN yum install -y openssl haproxy
+RUN  openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com" -out cert.pem
+RUN cat key.pem cert.pem > /etc/ssl/ssl-termination.pem
+COPY ./cfg/haproxy.cfg /etc/haproxy/haproxy.cfg
+EXPOSE 443
+ENTRYPOINT haproxy -f /etc/haproxy/haproxy.cfg
